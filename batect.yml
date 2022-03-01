@@ -1,0 +1,27 @@
+containers:
+  node-fastify-server:
+    image: node:14.3.0
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - type: cache
+        name: node_modules
+        container: /code/node_modules
+    working_directory: /code
+
+tasks:
+  install-dep:
+    description: Install all dependencies
+    run:
+      container: node-fastify-server
+      command: npm install
+  start-server:
+    description: Run server
+    run:
+      environment:
+        PORT: 8080
+      container: node-fastify-server
+      command: npm run start
+      ports:
+        - 5000:8080
